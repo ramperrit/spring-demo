@@ -6,14 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "item")
 @Getter
 @Setter
 @ToString
-public class Item {
+public class Item extends BaseEntity{
     //JPA는 PK가 꼭 필요함
 
     @Id
@@ -37,6 +35,6 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
-    private LocalDateTime regTime;
-    private LocalDateTime updateTime;
+//    private LocalDateTime regTime;
+//    private LocalDateTime updateTime;
 }
