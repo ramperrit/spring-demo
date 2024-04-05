@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
@@ -24,6 +25,10 @@ public class SecurityConfig{
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+        HttpSessionRequestCache c = new HttpSessionRequestCache();
+        c.setMatchingRequestParameterName(null);
+
+
         http.formLogin((it) -> it
                 .loginPage("/members/login")
                 .defaultSuccessUrl("/")
@@ -42,9 +47,12 @@ public class SecurityConfig{
                 .requestMatchers(antMatcher("/item/**")).permitAll()
                 .requestMatchers(antMatcher("/css/**")).permitAll()
                 .requestMatchers(antMatcher("/images/**")).permitAll()
+                .requestMatchers(antMatcher("/img/**")).permitAll()
                 .requestMatchers(antMatcher("/admin/**")).hasRole("ADMIN")
                 .anyRequest().authenticated();
         });
+
+        http.requestCache((it) -> it.requestCache(c));
 
         http.exceptionHandling((e) -> e.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
 
