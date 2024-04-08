@@ -1,15 +1,16 @@
 package com.shop.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
@@ -25,8 +26,8 @@ public class SecurityConfig{
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        HttpSessionRequestCache c = new HttpSessionRequestCache();
-        c.setMatchingRequestParameterName(null);
+//        HttpSessionRequestCache c = new HttpSessionRequestCache();
+//        c.setMatchingRequestParameterName(null);
 
 
         http.formLogin((it) -> it
@@ -43,16 +44,17 @@ public class SecurityConfig{
 
         http.authorizeHttpRequests((req)-> {req
                 .requestMatchers(antMatcher("/")).permitAll()
+                .requestMatchers(antMatcher("/favicon.ico")).permitAll()
                 .requestMatchers(antMatcher("/members/**")).permitAll()
                 .requestMatchers(antMatcher("/item/**")).permitAll()
-                .requestMatchers(antMatcher("/css/**")).permitAll()
+//                .requestMatchers(antMatcher("/css/**")).permitAll()
                 .requestMatchers(antMatcher("/images/**")).permitAll()
                 .requestMatchers(antMatcher("/img/**")).permitAll()
                 .requestMatchers(antMatcher("/admin/**")).hasRole("ADMIN")
                 .anyRequest().authenticated();
         });
 
-        http.requestCache((it) -> it.requestCache(c));
+//        http.requestCache((it) -> it.requestCache(c));
 
         http.exceptionHandling((e) -> e.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
 
@@ -62,5 +64,11 @@ public class SecurityConfig{
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return web -> web.ignoring()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 }
