@@ -153,6 +153,7 @@
                 url : url,
                 type : "POST",
                 contentType : "application/json",
+                data : param,
                 beforeSend : function(xhr){
                     //데이터 전송전에 csrf값 설정
                     xhr.setRequestHeader(header, token);
