@@ -48,7 +48,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-
     @GetMapping("/login")
     public String loginMember(){
         return "member/memberLoginForm";
@@ -60,9 +59,18 @@ public class MemberController {
         return "member/memberLoginForm";
     }
 
-//    @GetMapping("/find")
-//    public String findMember(){
-//
+    @GetMapping("/findPw")
+    public String findPw(){
+        return "member/findPw";
+    }
+
+//    @PostMapping("/findPw")
+//    public String findPw(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
+//        if(bindingResult.hasErrors()){
+//            return "member/findPw";
+//        }
+//        return "redirect:/";
 //    }
+
 
 }
