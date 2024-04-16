@@ -14,7 +14,7 @@ import org.thymeleaf.util.StringUtils;
 @RequiredArgsConstructor
 @Transactional
 public class ItemImgService {
-    @Value("home/ec2-user/project/spring-demo/target/itemImg")
+    @Value("C:/shop/item")
     private String itemImgLoction;
 
     private final ItemImgRepository itemImgRepository;
